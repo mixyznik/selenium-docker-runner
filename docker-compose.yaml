@@ -19,8 +19,6 @@ services:
       - /tmp/videos:/home/seluser/videos
       - /var/run/docker.sock:/var/run/docker.sock
       
-    ports:
-      - 4444:4444
     command: >
       start --desiredContainers 2
             --maxDockerSeleniumContainers 8
@@ -51,4 +49,4 @@ services:
       - HUB_HOST=zalenium
       - MODULE=searchmodule.xml
     volumes:
-      - ./search-result:/usr/share/udemy/test-output
+      - ./output/search-result:/usr/share/udemy/test-output
