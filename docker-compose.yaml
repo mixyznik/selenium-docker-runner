@@ -1,0 +1,54 @@
+# Usage:
+#   docker-compose up --force-recreate
+version: '3'
+
+services:
+  #--------------#
+  elgalu:
+    image: "elgalu/selenium"
+    container_name: elgalu
+    hostname: elgalu
+  zalenium:
+    image: "dosel/zalenium"
+    depends_on:
+      - elgalu
+    container_name: zalenium
+    hostname: zalenium
+    tty: true
+    volumes:
+      - /tmp/videos:/home/seluser/videos
+      - /var/run/docker.sock:/var/run/docker.sock
+      
+    ports:
+      - 4444:4444
+    command: >
+      start --desiredContainers 2
+            --maxDockerSeleniumContainers 8
+            --screenWidth 800 --screenHeight 600
+            --timeZone "Europe/Berlin"
+            --videoRecordingEnabled true
+            --sauceLabsEnabled false
+            --browserStackEnabled false
+            --testingBotEnabled false
+            --startTunnel false
+    environment:
+      - HOST_UID
+      - HOST_GID
+      - SAUCE_USERNAME
+      - SAUCE_ACCESS_KEY
+      - BROWSER_STACK_USER
+      - BROWSER_STACK_KEY
+      - TESTINGBOT_KEY
+      - TESTINGBOT_SECRET
+      - CBT_USERNAME
+      - CBT_AUTHKEY
+  searchmodule:
+    image: milostoster80/docker-test
+    depends_on:
+      - zalenium
+    environment:
+      - BROWSER=chrome
+      - HUB_HOST=zalenium
+      - MODULE=searchmodule.xml
+    volumes:
+      - ./search-result:/usr/share/udemy/test-output
