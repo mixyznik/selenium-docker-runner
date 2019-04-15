@@ -11,12 +11,12 @@ pipeline{
                 sh "docker-compose up searchmodule"
             }
         }  
-       
+    }   
     post{
         always{
             archiveArtifacts artifacts: 'output/**'
             sh "docker-compose down"
         }
     }    
-    }
+    
 }
