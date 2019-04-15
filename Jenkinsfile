@@ -1,12 +1,17 @@
 pipeline{
     agent any
     stages{
-        stage("Run Test"){
+        stage("Start Grid"){
             steps{
-                sh "docker-compose up"
+                sh "docker-compose up -d elgalu zalenium"
             }
-        }    
-        stage("Bring Grid Down"){
+        }  
+        stage("Rnu Test"){
+            steps{
+                sh "docker-compose up searchmodule"
+            }
+        }  
+        stage("Stop Grid"){
             steps{
                 sh "docker-compose down"
             }
